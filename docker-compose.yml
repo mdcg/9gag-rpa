@@ -1,9 +1,0 @@
-bot:
-  build: .
-  command: python src/bot/app.py
-  stdin_open: true
-  tty: true
-  volumes:
-    - .:/code
-  ports:
-    - "8888:8888"

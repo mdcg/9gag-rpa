@@ -1,5 +1,6 @@
 # 9gag-rpa
-Simple RPA to automate image capture in 9GAG using Selenium and Python
+
+:robot: Simple RPA to automate image capture in 9GAG using Selenium and Python
 
 ## Introduction
 
@@ -23,3 +24,7 @@ $ python app.py 1000
 ```
 
 *PS: This number "1000" is the amount of "clicks down" that RPA will simulate, since in 9GAG there is not really a pagination, but an "infinite scroll". You can increase or decrease this amount as long as it is not less than 0.*
+
+## Contributing
+
+Feel free to do whatever you want with this project. :-)

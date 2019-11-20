@@ -1,5 +1,4 @@
 import sys
-import uuid
 from urllib.request import urlretrieve
 
 from selenium import webdriver
@@ -21,6 +20,7 @@ class BOT(object):
         self.wd = wd
         self.times_to_scroll_down = self.times_to_scroll_down_validation(
             times_to_scroll_down)
+        self.conn = Connection()
         self.wd.get('http://9gag.com')
 
     def page_scroll_down(self, element, times):
@@ -30,13 +30,21 @@ class BOT(object):
     def get_img_src(self, element):
         return element.get_attribute("src")
 
+    def get_img_name(self, src):
+        return src.split("/")[-1]
+
     def print_img_src(self, element):
         print(self.get_img_src(element))
 
     def download_img(self, element):
         src = self.get_img_src(element)
-        id = str(uuid.uuid4())
-        urlretrieve(src, f"media/{id}.jpg")
+        img_name = self.get_img_name(src)
+
+        if self.conn.img_name_already_exists_in_db(img_name):
+            return
+
+        self.conn.insert_img_name_in_db(img_name)
+        urlretrieve(src, f"media/{img_name}")
 
     def find_all_images(self):
         return self.wd.find_elements_by_xpath("//picture/img")
@@ -50,6 +58,8 @@ class BOT(object):
         for img in images:
             self.print_img_src(img)
             self.download_img(img)
+
+        self.conn.close_connection()
 
     def times_to_scroll_down_validation(self, informed_times):
         try:
@@ -68,9 +78,11 @@ if __name__ == "__main__":
     try:
         informed_number_of_times_to_scroll_down = sys.argv[1]
     except IndexError:
-        raise IndexError("You need to enter the number of times you want to scroll down. e.g. python app.py 1000")
+        raise IndexError(
+            "You need to enter the number of times you want to scroll down. e.g. python app.py 1000")
 
     options = Options()
+    options.headless = True
     wdriver = webdriver.Firefox(options=options)
 
     rpa_bot = BOT(wdriver, informed_number_of_times_to_scroll_down)

@@ -82,10 +82,11 @@ if __name__ == "__main__":
             "You need to enter the number of times you want to scroll down. e.g. python app.py 1000")
 
     options = Options()
-    options.headless = True
     wdriver = webdriver.Firefox(options=options)
 
     rpa_bot = BOT(wdriver, informed_number_of_times_to_scroll_down)
+    print("Booting 9GAG RPA ...")
     rpa_bot.start()
-
     wdriver.close()
+    print("Finishing ...")
+

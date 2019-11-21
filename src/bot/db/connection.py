@@ -1,5 +1,4 @@
 import sqlite3
-from datetime import datetime, timedelta
 
 from .initial_config import start_initial_db_config
 

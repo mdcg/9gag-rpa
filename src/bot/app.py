@@ -1,3 +1,4 @@
+import logging
 import sys
 from urllib.request import urlretrieve
 
@@ -7,20 +8,23 @@ from selenium.webdriver.firefox.options import Options
 
 from db.connection import Connection
 
-
 """
 - https://stackoverflow.com/questions/40208051/selenium-using-python-geckodriver-executable-needs-to-be-in-path
 - https://www.blazemeter.com/blog/how-to-run-selenium-tests-in-docker/
 - https://stackoverflow.com/questions/52534658/webdriverexception-message-invalid-argument-cant-kill-an-exited-process-with
 """
 
+logging.basicConfig(format='[%(asctime)s] | %(message)s', level=logging.INFO)
+
 
 class BOT(object):
     def __init__(self, wd, times_to_scroll_down):
-        self.wd = wd
         self.times_to_scroll_down = self.times_to_scroll_down_validation(
             times_to_scroll_down)
+
         self.conn = Connection()
+
+        self.wd = wd
         self.wd.get('http://9gag.com')
 
     def page_scroll_down(self, element, times):
@@ -34,7 +38,7 @@ class BOT(object):
         return src.split("/")[-1]
 
     def print_img_src(self, element):
-        print(self.get_img_src(element))
+        logging.info(self.get_img_src(element))
 
     def download_img(self, element):
         src = self.get_img_src(element)
@@ -81,12 +85,14 @@ if __name__ == "__main__":
         raise IndexError(
             "You need to enter the number of times you want to scroll down. e.g. python app.py 1000")
 
+    logging.info("Booting 9GAG RPA ...")
+
     options = Options()
     wdriver = webdriver.Firefox(options=options)
 
     rpa_bot = BOT(wdriver, informed_number_of_times_to_scroll_down)
-    print("Booting 9GAG RPA ...")
     rpa_bot.start()
-    wdriver.close()
-    print("Finishing ...")
 
+    wdriver.close()
+
+    logging.info("Finishing ...")

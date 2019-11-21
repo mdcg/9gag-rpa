@@ -1,3 +1,4 @@
+import logging
 import sqlite3
 
 
@@ -13,9 +14,12 @@ def start_initial_db_config():
     if not cursor.fetchone()[0] == 1:
         cursor.execute(
             """CREATE TABLE imgs_src (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, src TEXT NOT NULL)""")
-        print('Successfully created table.')
+
+        logging.info('Successfully created table.')
+
         conn.close()
-        return 
+
+        return
 
     conn.commit()
     conn.close()

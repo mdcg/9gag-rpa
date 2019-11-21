@@ -27,32 +27,6 @@ class BOT(object):
         self.wd = wd
         self.wd.get('http://9gag.com')
 
-    def page_scroll_down(self, element, times):
-        for _ in range(0, times):
-            element.send_keys("", Keys.ARROW_DOWN)
-
-    def get_img_src(self, element):
-        return element.get_attribute("src")
-
-    def get_img_name(self, src):
-        return src.split("/")[-1]
-
-    def print_img_src(self, element):
-        logging.info(self.get_img_src(element))
-
-    def download_img(self, element):
-        src = self.get_img_src(element)
-        img_name = self.get_img_name(src)
-
-        if self.conn.img_name_already_exists_in_db(img_name):
-            return
-
-        self.conn.insert_img_name_in_db(img_name)
-        urlretrieve(src, f"media/{img_name}")
-
-    def find_all_images(self):
-        return self.wd.find_elements_by_xpath("//picture/img")
-
     def start(self):
         body = self.wd.find_element_by_tag_name("body")
         self.page_scroll_down(
@@ -76,6 +50,32 @@ class BOT(object):
                 "Enter only nonnegative integers greater than zero.")
 
         return times
+
+    def page_scroll_down(self, element, times):
+        for _ in range(0, times):
+            element.send_keys("", Keys.ARROW_DOWN)
+
+    def find_all_images(self):
+        return self.wd.find_elements_by_xpath("//picture/img")
+
+    def get_img_src(self, element):
+        return element.get_attribute("src")
+
+    def get_img_name(self, src):
+        return src.split("/")[-1]
+
+    def print_img_src(self, element):
+        logging.info(self.get_img_src(element))
+
+    def download_img(self, element):
+        src = self.get_img_src(element)
+        img_name = self.get_img_name(src)
+
+        if self.conn.img_name_already_exists_in_db(img_name):
+            return
+
+        self.conn.insert_img_name_in_db(img_name)
+        urlretrieve(src, f"media/{img_name}")
 
 
 if __name__ == "__main__":

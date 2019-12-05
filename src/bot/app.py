@@ -8,12 +8,6 @@ from selenium.webdriver.firefox.options import Options
 
 from db.connection import Connection
 
-"""
-- https://stackoverflow.com/questions/40208051/selenium-using-python-geckodriver-executable-needs-to-be-in-path
-- https://www.blazemeter.com/blog/how-to-run-selenium-tests-in-docker/
-- https://stackoverflow.com/questions/52534658/webdriverexception-message-invalid-argument-cant-kill-an-exited-process-with
-"""
-
 logging.basicConfig(format='[%(asctime)s] | %(message)s', level=logging.INFO)
 
 
@@ -82,16 +76,21 @@ if __name__ == "__main__":
     try:
         informed_number_of_times_to_scroll_down = sys.argv[1]
     except IndexError:
-        raise IndexError(
+        logging.error(
             "You need to enter the number of times you want to scroll down. e.g. python app.py 1000")
+        sys.exit(1)
 
     logging.info("Booting 9GAG RPA ...")
 
-    options = Options()
-    wdriver = webdriver.Firefox(options=options)
+    try:
+        options = Options()
+        wdriver = webdriver.Firefox(options=options)
 
-    rpa_bot = BOT(wdriver, informed_number_of_times_to_scroll_down)
-    rpa_bot.start()
+        rpa_bot = BOT(wdriver, informed_number_of_times_to_scroll_down)
+        rpa_bot.start()
+    except KeyboardInterrupt:
+        logging.error("Stopping processing..")
+        sys.exit(1)
 
     wdriver.close()
 

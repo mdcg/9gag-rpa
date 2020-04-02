@@ -8,23 +8,23 @@ from selenium.webdriver.firefox.options import Options
 
 from db.connection import Connection
 
-logging.basicConfig(format='[%(asctime)s] | %(message)s', level=logging.INFO)
+logging.basicConfig(format="[%(asctime)s] | %(message)s", level=logging.INFO)
 
 
 class BOT(object):
     def __init__(self, wd, times_to_scroll_down):
         self.times_to_scroll_down = self.times_to_scroll_down_validation(
-            times_to_scroll_down)
+            times_to_scroll_down
+        )
 
         self.conn = Connection()
 
         self.wd = wd
-        self.wd.get('http://9gag.com')
+        self.wd.get("http://9gag.com")
 
     def start(self):
         body = self.wd.find_element_by_tag_name("body")
-        self.page_scroll_down(
-            body, self.times_to_scroll_down)
+        self.page_scroll_down(body, self.times_to_scroll_down)
 
         images = self.find_all_images()
         for img in images:
@@ -41,7 +41,8 @@ class BOT(object):
 
         if times < 0:
             raise Exception(
-                "Enter only nonnegative integers greater than zero.")
+                "Enter only nonnegative integers greater than zero."
+            )
 
         return times
 
@@ -77,7 +78,8 @@ if __name__ == "__main__":
         informed_number_of_times_to_scroll_down = sys.argv[1]
     except IndexError:
         logging.error(
-            "You need to enter the number of times you want to scroll down. e.g. python app.py 1000")
+            "You need to enter the number of times you want to scroll down. e.g. python app.py 1000"
+        )
         sys.exit(1)
 
     logging.info("Booting 9GAG RPA ...")

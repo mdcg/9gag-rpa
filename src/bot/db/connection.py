@@ -6,19 +6,21 @@ from .initial_config import start_initial_db_config
 class Connection(object):
     def __init__(self):
         start_initial_db_config()
-        self.conn = sqlite3.connect('9gag.db')
+        self.conn = sqlite3.connect("9gag.db")
         self.cursor = self.conn.cursor()
 
     def insert_img_name_in_db(self, src):
-        self.cursor.execute("""
+        self.cursor.execute(
+            """
             INSERT INTO imgs_src (src)
             VALUES (?)
-            """, (src,))
+            """,
+            (src,),
+        )
         self.conn.commit()
 
     def get_src(self, src):
-        self.cursor.execute(
-            "SELECT src FROM imgs_src WHERE src = ?", (src,))
+        self.cursor.execute("SELECT src FROM imgs_src WHERE src = ?", (src,))
         return self.cursor.fetchone()
 
     def img_name_already_exists_in_db(self, src):
